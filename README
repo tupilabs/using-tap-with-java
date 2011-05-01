@@ -1,0 +1,4 @@
+This book is intended to show to to use TAP with Java. 
+
+It covers basic concepts of TAP and extending known test frameworks such as 
+TestNG and JUnit with TAP.
