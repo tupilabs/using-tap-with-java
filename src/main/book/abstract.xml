@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<abstract  version="5.0" xmlns="http://docbook.org/ns/docbook">
+	<para>This book is an Open Source project intended to give users a 
+	further understanding of what is TAP and how to use it with Java. In this 
+	book examples using TestNG and JUnit are used to better explain how you 
+	can use TAP in a productive Java environment.</para>
+</abstract>

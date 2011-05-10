@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<preface version="5.0" xmlns="http://docbook.org/ns/docbook"
+<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:db="http://docbook.org/ns/docbook">
+         xmlns:ns3="http://www.w3.org/1999/xhtml">
+         
 	<title>Alternatives to TAP</title>
 	
-	<para>Let the show start...</para>
-</preface>
+	<para>The first alternative to TAP would be the 'not TAP', where you 
+	simply keep using your current output format. Say you are using JUnit, 
+	then you keep using JUnit.</para>
+	
+	<para>However, if you are looking for another standard for an output format 
+	for your tests, then you may have a look at 
+	<link xlink:href="http://launchpad.net/subunit">Subunit</link>.</para>
+	
+	<blockquote>
+		<para>Subunit is a streaming protocol for test results. 
+		The protocol is human readable and easily generated and parsed. 
+		By design all the components of the protocol conceptually fit 
+		into the xUnit TestCase->TestResult interaction.</para>
+		<address><xref xlink:href="http://launchpad.net/subunit"/></address>
+	</blockquote>
+	
+	<para>Subunit also contains a small tool that converts TAP to Subunit.</para>
+	
+</chapter>
