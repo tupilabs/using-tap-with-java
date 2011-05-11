@@ -8,6 +8,16 @@
          
 	<title>TestNG and TAP</title>
 	
-	<para>Let the show start...</para>
+	<para>TestNG was created by Cédric Beust as test framework to fill the 
+	gaps left by JUnit. One of these gaps was extensibility. In tap4j there is 
+	a Listener responsible for creating a TAP Stream for a Test Result.</para>
+	
+	<para>Say you have a test project with over two hundreds tests and would 
+	like to have your test results outputted in TAP. I you will have to do 
+	is add a listener to your suite of tests. Let's see some examples that 
+	may help making it clear.</para>
+	
+	<programlisting><![CDATA[]]>
+	</programlisting>
 
 </chapter>
