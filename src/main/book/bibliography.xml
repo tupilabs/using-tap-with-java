@@ -7,24 +7,30 @@
 	<abbrev>TAP</abbrev>
 	<title>Test Anything Protocol Website</title>
 	<author>
-		<orgname>Test Anything Protocol Community</orgname>	
+		<orgname>Test Anything Protocol Community</orgname>
+		<uri>http://testanything.org/</uri>	
 	</author>
+	<copyright><year>2011</year><holder>Test Anything Protocol Community</holder></copyright>
 </biblioentry>
 
 <biblioentry>
 	<abbrev>TAPWikipedia</abbrev>
 	<title>Test Anything Protocol article in Wikipedia</title>
 	<author>
-		<orgname>Wikipedia</orgname>	
+		<orgname>Wikipedia</orgname>
+		<uri>http://en.wikipedia.org/wiki/Test_Anything_Protocol</uri>	
 	</author>
+	<copyright><year>2011</year><holder>Wikipedia</holder></copyright>
 </biblioentry>
 
 <biblioentry>
 	<abbrev>JenkinsTestLink</abbrev>
 	<title>Jenkins TestLink Plug-in</title>
 	<author>
-		<orgname>The Jenkins TestLink Plug-in team</orgname>	
+		<orgname>The Jenkins TestLink Plug-in team</orgname>
+		<uri>http://wiki.jenkins-ci.org/display/JENKINS/TestLink+Plugin</uri>	
 	</author>
+	<copyright><year>2011</year><holder>The Jenkins TestLink Plug-in team</holder></copyright>
 </biblioentry>
 
 <biblioentry>
@@ -35,7 +41,19 @@
 			<firstname>Robert</firstname>
 			<surname>Collins</surname>
 		</personname>
+		<uri>http://launchpad.net/subunit</uri>
 	</author>
+	<copyright><year>2011</year><holder>Robert Collins</holder></copyright>
+</biblioentry>
+
+<biblioentry>
+	<abbrev>YAMLorg</abbrev>
+	<title>YAML.org</title>
+	<author>
+		<orgname>YAML.org</orgname>
+		<uri>http://www.yaml.org</uri>
+	</author>
+	<copyright><year>2011</year><holder>YAML.org</holder></copyright>
 </biblioentry>
 
 </bibliography>

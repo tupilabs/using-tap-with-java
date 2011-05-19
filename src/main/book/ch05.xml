@@ -4,7 +4,7 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns3="http://www.w3.org/1999/xhtml">
+         xmlns:ns3="http://www.w3.org/1999/xhtml" xml:id="chapter.testng">
          
 	<title><application>TestNG</application> and <acronym>TAP</acronym></title>
 	

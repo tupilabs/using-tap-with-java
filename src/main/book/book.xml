@@ -21,12 +21,6 @@
   
   <xi:include href="ch07.xml" />
   
-  <xi:include href="ch08.xml" />
-  
-  <xi:include href="ch09.xml" />
-  
-  <xi:include href="ch10.xml" />
-  
   <xi:include href="bibliography.xml" />
 
 </book>

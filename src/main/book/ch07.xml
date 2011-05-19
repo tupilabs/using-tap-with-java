@@ -6,8 +6,19 @@
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml">
          
-	<title>Diagnostics in TAP with YAML</title>
+	<title><application>Selenium</application>, <application>TestNG</application> 
+	and <acronym>TAP</acronym></title>
 	
-	<para>Let the show start...</para>
+	<para>In this final chapter we will guide you through a more detailed and 
+	technical path: use <acronym>TAP</acronym> in your 
+	<application>Selenium</application> test back ended by 
+	<application>TestNG</application>. It means you will run 
+	<application>TestNG</application> tests that uses <application>Selenium</application> 
+	API for funcional Web tests and the output of this process will be 
+	<acronym>TAP</acronym>.</para>
+	
+	<para>So it is hammer time! If you are still confused about how to integrate 
+	<application>TestNG</application> and <acronym>TAP</acronym>, please go back  
+	to <link linkend="chapter.testng">Chapter 6</link> to read about it.</para>
 	
 </chapter>
