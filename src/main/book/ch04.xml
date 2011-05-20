@@ -41,11 +41,6 @@ public class MyJUnitTestClass extends TestCase
 	{
 		Assert.assertTrue( "O".equals( "0" ) );
 	}
-	
-	public void testNotEquals()
-	{
-		Assert.assertTrue( !"O".equals( "0" ) );
-	}
 }]]>
 </programlisting>
 	</example>
