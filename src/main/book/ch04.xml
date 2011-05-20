@@ -8,6 +8,192 @@
          
 	<title>JUnit and TAP</title>
 	
-	<para>Let the show start...</para>
+	<para><application>JUnit</application> is the most famous unit testing framework for JAVA. 
+	It was created by Eric Gamma and Kent Beck.</para>
+	
+	<para>With <application>tap4j</application> it is possible to generate TAP output for 
+	<application>JUnit</application> tests.</para>
+	
+	<para>The integration between tap4j and <application>JUnit</application> is achieved 
+	through the use of a JUnit RunListener (JUnit RunListener), so, in order to be able 
+	to produce tap files with <application>JUnit</application> you have to tell 
+	<application>JUnit</application> that you will be using a Listener. For that you will 
+	need to create an initial test executor class, instantiate a JUnitCore object, add the 
+	JUnitTestTapReporter listener class provided by <application>tap4j</application> 
+	and run your tests.</para>
+	
+	
+	<para>So, imagine we have a simple <application>JUnit</application> test class and we 
+	want to make it generates <acronym>TAP</acronym> results.</para>
+	
+	<example>
+		<title>sample.MyJUnitTestClass.java</title>
+<programlisting 
+linenumbering="numbered" 
+language="Java"><![CDATA[package sample;
+
+import junit.framework.Assert;
+import junit.framework.TestCase;
+
+public class MyJUnitTestClass extends TestCase
+{
+	public void testEquals()
+	{
+		Assert.assertTrue( "O".equals( "0" ) );
+	}
+}]]>
+</programlisting>
+	</example>
+	
+	<para>Here we have a sample test class called MyJUnitTestClass with 1 method 
+	testEquals supposed to return passed as result.</para>
+	
+	<para>We need then to create the <application>JUnit</application> test executor class, 
+	where we must add the <application>JUnit</application> <acronym>TAP</acronym> 
+	reporter listener.</para>
+	
+	<example>
+		<title>sample.RunJUnitSuiteWithListener.java</title>
+<programlisting 
+linenumbering="numbered" 
+language="Java"><![CDATA[package sample;
+
+import org.junit.runner.JUnitCore;
+
+import org.tap4j.ext.junit.JUnitTestTapReporter;
+
+public class RunJUnitSuiteWithListener 
+{
+	public static void main(String[] args) 
+	{
+		// Create a JUnit suite
+		TestSuite suite = new TestSuite();
+		
+		// Add every test class you want to the suite
+		suite.addTestSuite(MyJUnitTestClass.class);
+		
+		// Instantiate a JUniteCore object
+		JUnitCore core = new JUnitCore();
+		
+		// Add TAP Reporter Listener to the core object executor
+		core.addListener(new JUnitTestTapReporter());
+		
+		// Run the test suite
+		core.run(suite);
+	}
+}]]>
+</programlisting>
+	</example>
+	
+	<para>So, when we execute the RunJUnitTestWithListener class, it will run the 
+	MyJUnitTestClass with the JUnitTestTapReporter listener. As a result 
+	we are going to have 3 tap files. 1 for the suite, 1 for the class 1 for the method.</para>
+	
+	<example>
+	<title>sample.MyJUnitTestClass-SUITE.tap</title>
+<programlisting><![CDATA[]]>1..1
+not ok 1 - sample.MyJUnitTestClass#testEquals
+  ---
+  message: JUnit 4.0 Test testEquals(sample.MyJUnitTestClass)
+  severity: High
+  source: sample.MyJUnitTestClass#testEquals
+  datetime: '2011-05-20T11:04:11'
+  file: sample.MyJUnitTestClass
+  line: '10'
+  name: testEquals
+  error: 'null'
+  backtrace: "junit.framework.AssertionFailedError: null\n\tat junit.framework.Assert.fail(Assert.java:47)\n\
+    \tat junit.framework.Assert.assertTrue(Assert.java:20)\n\tat junit.framework.Assert.assertTrue(Assert.java:27)\n\
+    \tat sample.MyJUnitTestClass.testEquals(MyJUnitTestClass.java:10)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native\
+    \ Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)\n\
+    \tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)\n\
+    \tat java.lang.reflect.Method.invoke(Method.java:597)\n\tat junit.framework.TestCase.runTest(TestCase.java:168)\n\
+    \tat junit.framework.TestCase.runBare(TestCase.java:134)\n\tat junit.framework.TestResult$1.protect(TestResult.java:110)\n\
+    \tat junit.framework.TestResult.runProtected(TestResult.java:128)\n\tat junit.framework.TestResult.run(TestResult.java:113)\n\
+    \tat junit.framework.TestCase.run(TestCase.java:124)\n\tat junit.framework.TestSuite.runTest(TestSuite.java:243)\n\
+    \tat junit.framework.TestSuite.run(TestSuite.java:238)\n\tat junit.framework.TestSuite.runTest(TestSuite.java:243)\n\
+    \tat junit.framework.TestSuite.run(TestSuite.java:238)\n\tat org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:83)\n\
+    \tat org.junit.runner.JUnitCore.run(JUnitCore.java:157)\n\tat org.junit.runner.JUnitCore.run(JUnitCore.java:145)\n\
+    \tat sample.RunJUnitSuiteWithListener.main(RunJUnitSuiteWithListener.java:56)\n"
+  ...
+</programlisting>
+	</example>
+	
+	<example>
+	<title>sample.MyJUnitTestClass.tap</title>
+<programlisting><![CDATA[]]>1..1
+not ok 1 - sample.MyJUnitTestClass#testEquals
+  ---
+  message: JUnit 4.0 Test testEquals(sample.MyJUnitTestClass)
+  severity: High
+  source: sample.MyJUnitTestClass#testEquals
+  datetime: '2011-05-20T11:04:11'
+  file: sample.MyJUnitTestClass
+  line: '10'
+  name: testEquals
+  error: 'null'
+  backtrace: "junit.framework.AssertionFailedError: null\n\tat junit.framework.Assert.fail(Assert.java:47)\n\
+    \tat junit.framework.Assert.assertTrue(Assert.java:20)\n\tat junit.framework.Assert.assertTrue(Assert.java:27)\n\
+    \tat sample.MyJUnitTestClass.testEquals(MyJUnitTestClass.java:10)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native\
+    \ Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)\n\
+    \tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)\n\
+    \tat java.lang.reflect.Method.invoke(Method.java:597)\n\tat junit.framework.TestCase.runTest(TestCase.java:168)\n\
+    \tat junit.framework.TestCase.runBare(TestCase.java:134)\n\tat junit.framework.TestResult$1.protect(TestResult.java:110)\n\
+    \tat junit.framework.TestResult.runProtected(TestResult.java:128)\n\tat junit.framework.TestResult.run(TestResult.java:113)\n\
+    \tat junit.framework.TestCase.run(TestCase.java:124)\n\tat junit.framework.TestSuite.runTest(TestSuite.java:243)\n\
+    \tat junit.framework.TestSuite.run(TestSuite.java:238)\n\tat junit.framework.TestSuite.runTest(TestSuite.java:243)\n\
+    \tat junit.framework.TestSuite.run(TestSuite.java:238)\n\tat org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:83)\n\
+    \tat org.junit.runner.JUnitCore.run(JUnitCore.java:157)\n\tat org.junit.runner.JUnitCore.run(JUnitCore.java:145)\n\
+    \tat sample.RunJUnitSuiteWithListener.main(RunJUnitSuiteWithListener.java:56)\n"
+  ...
+</programlisting>
+	</example>
+
+	<example>
+	<title>sample.MyJUnitTestClass#testEquals.tap</title>
+<programlisting><![CDATA[]]>1..1
+not ok 1 - sample.MyJUnitTestClass#testEquals
+  ---
+  message: JUnit 4.0 Test testEquals(sample.MyJUnitTestClass)
+  severity: High
+  source: sample.MyJUnitTestClass#testEquals
+  datetime: '2011-05-20T11:04:11'
+  file: sample.MyJUnitTestClass
+  line: '10'
+  name: testEquals
+  error: 'null'
+  backtrace: "junit.framework.AssertionFailedError: null\n\tat junit.framework.Assert.fail(Assert.java:47)\n\
+    \tat junit.framework.Assert.assertTrue(Assert.java:20)\n\tat junit.framework.Assert.assertTrue(Assert.java:27)\n\
+    \tat sample.MyJUnitTestClass.testEquals(MyJUnitTestClass.java:10)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native\
+    \ Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)\n\
+    \tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)\n\
+    \tat java.lang.reflect.Method.invoke(Method.java:597)\n\tat junit.framework.TestCase.runTest(TestCase.java:168)\n\
+    \tat junit.framework.TestCase.runBare(TestCase.java:134)\n\tat junit.framework.TestResult$1.protect(TestResult.java:110)\n\
+    \tat junit.framework.TestResult.runProtected(TestResult.java:128)\n\tat junit.framework.TestResult.run(TestResult.java:113)\n\
+    \tat junit.framework.TestCase.run(TestCase.java:124)\n\tat junit.framework.TestSuite.runTest(TestSuite.java:243)\n\
+    \tat junit.framework.TestSuite.run(TestSuite.java:238)\n\tat junit.framework.TestSuite.runTest(TestSuite.java:243)\n\
+    \tat junit.framework.TestSuite.run(TestSuite.java:238)\n\tat org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:83)\n\
+    \tat org.junit.runner.JUnitCore.run(JUnitCore.java:157)\n\tat org.junit.runner.JUnitCore.run(JUnitCore.java:145)\n\
+    \tat sample.RunJUnitSuiteWithListener.main(RunJUnitSuiteWithListener.java:56)\n"
+  ...
+</programlisting>
+	</example>
+
+	<para>As we have only one test suite with one test class and only one test method, 
+	all 3 files have exactly the same content.</para>
+		
+	<para>Pay attention! When you run the executor class it is not going 
+	to show the results on JUnit eclipse view. It runs in background and generates 
+	the TAP files in the project root. You need to refresh your project on navigator 
+	view to see the tap files that were generated</para>
+	
+	
+	<para>Finally the command line for execution of the class is</para>
+	
+	<example>
+		<programlisting><![CDATA[java -classpath %CLASSPATH%;junit-4.0.jar;jcommander-1.5.jar;commons-io-1.4.jar;
+guice-2.0.jar;commons-lang-2.5.jar;bsh-2.0b4.jar;snakeyaml-1.7.jar;
+aopalliance-1.0.jar;tap4j-1.4.3.jar;. RunJUnitTestWithListenerClass]]></programlisting>
+	</example>
 	
 </chapter>

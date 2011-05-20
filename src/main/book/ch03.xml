@@ -8,7 +8,7 @@
          
 	<title>How to use TAP in Java</title>
 	
-	<para>At the moment this book was being written there was two 
+	<para>At the moment this book was being written there were two 
 	implementations of TAP for Java: JTap and tap4j.</para>
 	
 	<para>JTap is a port of libtap (Perl) to Java by Patrick LeBoutillier 
