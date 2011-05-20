@@ -61,14 +61,14 @@ not ok 4 - Summarized correctly # TODO Not written yet]]>
 				server.</para>
 			</listitem>
 			<listitem>
-				<para>You need take a specific action based on a certain 
+				<para>You need to take a specific action based on a certain 
 				output property of your tests.</para>
 			</listitem>
 			<listitem>
 				<para>You need better control over your test execution.</para>
 			</listitem>
 			<listitem>
-				<para>You need attach other files (such as log files) to your 
+				<para>You need to attach other files (such as log files) to your 
 				test results.</para>
 			</listitem>
 			<listitem>
