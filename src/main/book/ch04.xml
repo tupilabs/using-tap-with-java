@@ -14,17 +14,18 @@
 	<para>With <application>tap4j</application> it is possible to generate TAP output for 
 	<application>JUnit</application> tests.</para>
 	
-	<para>The integration between tap4j and <application>JUnit</application> is achieved 
-	through the use of a JUnit RunListener (JUnit RunListener), so, in order to be able 
-	to produce tap files with <application>JUnit</application> you have to tell 
-	<application>JUnit</application> that you will be using a Listener. For that you will 
-	need to create an initial test executor class, instantiate a JUnitCore object, add the 
-	JUnitTestTapReporter listener class provided by <application>tap4j</application> 
-	and run your tests.</para>
+	<para>There are 2 possible ways to achieve the integration between tap4j and 
+	<application>JUnit</application>. One is creating a customized 
+	<application>JUnit</application> RunListener. The other way is using <application>TestNG</application> 
+	xml suites. In both cases it is necessary to add to the tests execution a Listener provided by 
+	<application>tap4j</application>.</para>
 	
+	<para>Let's speak more about each possible solution.</para>
 	
 	<para>So, imagine we have a simple <application>JUnit</application> test class and we 
 	want to make it generates <acronym>TAP</acronym> results.</para>
+	
+	<para>Using a JUnit test executor class</para>
 	
 	<example>
 		<title>sample.MyJUnitTestClass.java</title>
@@ -91,7 +92,7 @@ public class RunJUnitSuiteWithListener
 	
 	<example>
 	<title>sample.MyJUnitTestClass-SUITE.tap</title>
-<programlisting><![CDATA[]]>1..1
+<programlisting><![CDATA[1..1
 not ok 1 - sample.MyJUnitTestClass#testEquals
   ---
   message: JUnit 4.0 Test testEquals(sample.MyJUnitTestClass)
@@ -115,13 +116,13 @@ not ok 1 - sample.MyJUnitTestClass#testEquals
     \tat junit.framework.TestSuite.run(TestSuite.java:238)\n\tat org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:83)\n\
     \tat org.junit.runner.JUnitCore.run(JUnitCore.java:157)\n\tat org.junit.runner.JUnitCore.run(JUnitCore.java:145)\n\
     \tat sample.RunJUnitSuiteWithListener.main(RunJUnitSuiteWithListener.java:56)\n"
-  ...
+  ...]]>
 </programlisting>
 	</example>
 	
 	<example>
 	<title>sample.MyJUnitTestClass.tap</title>
-<programlisting><![CDATA[]]>1..1
+<programlisting><![CDATA[1..1
 not ok 1 - sample.MyJUnitTestClass#testEquals
   ---
   message: JUnit 4.0 Test testEquals(sample.MyJUnitTestClass)
@@ -145,13 +146,13 @@ not ok 1 - sample.MyJUnitTestClass#testEquals
     \tat junit.framework.TestSuite.run(TestSuite.java:238)\n\tat org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:83)\n\
     \tat org.junit.runner.JUnitCore.run(JUnitCore.java:157)\n\tat org.junit.runner.JUnitCore.run(JUnitCore.java:145)\n\
     \tat sample.RunJUnitSuiteWithListener.main(RunJUnitSuiteWithListener.java:56)\n"
-  ...
+  ...]]>
 </programlisting>
 	</example>
 
 	<example>
 	<title>sample.MyJUnitTestClass#testEquals.tap</title>
-<programlisting><![CDATA[]]>1..1
+<programlisting><![CDATA[1..1
 not ok 1 - sample.MyJUnitTestClass#testEquals
   ---
   message: JUnit 4.0 Test testEquals(sample.MyJUnitTestClass)
@@ -175,17 +176,17 @@ not ok 1 - sample.MyJUnitTestClass#testEquals
     \tat junit.framework.TestSuite.run(TestSuite.java:238)\n\tat org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:83)\n\
     \tat org.junit.runner.JUnitCore.run(JUnitCore.java:157)\n\tat org.junit.runner.JUnitCore.run(JUnitCore.java:145)\n\
     \tat sample.RunJUnitSuiteWithListener.main(RunJUnitSuiteWithListener.java:56)\n"
-  ...
+  ...]]>
 </programlisting>
 	</example>
 
 	<para>As we have only one test suite with one test class and only one test method, 
-	all 3 files have exactly the same content.</para>
+	all 3 files have exactly the same content about tests.</para>
 		
-	<para>Pay attention! When you run the executor class it is not going 
-	to show the results on JUnit eclipse view. It runs in background and generates 
-	the TAP files in the project root. You need to refresh your project on navigator 
-	view to see the tap files that were generated</para>
+	<para>Pay attention! When you run the executor class it is not going to show the 
+	results on <application>JUnit</application> eclipse view. It runs in background 
+	and generates the TAP files in the project root. You need to refresh your project 
+	on navigator view to see the tap files that were generated</para>
 	
 	
 	<para>Finally the command line for execution of the class is</para>
@@ -195,5 +196,39 @@ not ok 1 - sample.MyJUnitTestClass#testEquals
 guice-2.0.jar;commons-lang-2.5.jar;bsh-2.0b4.jar;snakeyaml-1.7.jar;
 aopalliance-1.0.jar;tap4j-1.4.3.jar;. RunJUnitTestWithListenerClass]]></programlisting>
 	</example>
+	
+	
+	<para>Using <application>TestNG</application> suite xml files to execute your 
+	<application>JUnit</application> tests</para>
+	
+	<para> This is strange, but it is a very good idea. It is easy to implement 
+	and works perfectly as TestNG can interpret JUnit and run just like TestNG. 
+	Here, you only need to create xml suite files with the tap4j listeners, just 
+	like you would do if the tests were made with TestNG. The only difference is 
+	that you need to set the "junit" attribute inside "&#60;suite&#60;" branch to 
+	"true". Really easy no? TestNG takes care of the rest.</para>
+	
+	<para>So your suite xml file will look like this:</para>
+	
+	<example>
+	<title>sample.MyJUnitTestClass#testEquals.tap</title>
+<programlisting><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="JUnit tests with TestNG suite" verbose="0" parallel="false" junit="true">
+  <listeners>
+    <listener class-name="org.tap4j.ext.testng.SuiteTAPReporter" /> 
+    <listener class-name="org.tap4j.ext.testng.TestTAPReporter" /> 
+  </listeners>
+  <test name="JUnit tests with TestNG suite" preserve-order="false">
+    <classes>
+      <class name="sample.MyJUnitTestClass"/>
+    </classes>
+  </test>
+</suite> 
+]]>
+</programlisting>
+	</example>
+	
+	<para>The results are going to be given just like in the other way.</para>
 	
 </chapter>
