@@ -88,10 +88,12 @@ public class RunJUnitSuiteWithListener
 	
 	<para>So, when we execute the RunJUnitTestWithListener class, it will run the 
 	MyJUnitTestClass with the JUnitTestTapReporter listener. As a result 
-	we are going to have 3 tap files. 1 for the suite, 1 for the class 1 for the method.</para>
+	we are going to have 3 tap files. 1 for the suite, 1 for the class and 1 for 
+	the method.</para>
 	
+
 	<example>
-	<title>sample.MyJUnitTestClass-SUITE.tap</title>
+	<title>sample.MyJUnitTestClass-SUITE.tap (tap per suite)</title>
 <programlisting><![CDATA[1..1
 not ok 1 - sample.MyJUnitTestClass#testEquals
   ---
@@ -120,8 +122,9 @@ not ok 1 - sample.MyJUnitTestClass#testEquals
 </programlisting>
 	</example>
 	
+	
 	<example>
-	<title>sample.MyJUnitTestClass.tap</title>
+	<title>sample.MyJUnitTestClass.tap (tap per class)</title>
 <programlisting><![CDATA[1..1
 not ok 1 - sample.MyJUnitTestClass#testEquals
   ---
@@ -150,8 +153,9 @@ not ok 1 - sample.MyJUnitTestClass#testEquals
 </programlisting>
 	</example>
 
+
 	<example>
-	<title>sample.MyJUnitTestClass#testEquals.tap</title>
+	<title>sample.MyJUnitTestClass#testEquals.tap (tap per method)</title>
 <programlisting><![CDATA[1..1
 not ok 1 - sample.MyJUnitTestClass#testEquals
   ---
@@ -189,9 +193,10 @@ not ok 1 - sample.MyJUnitTestClass#testEquals
 	on navigator view to see the tap files that were generated</para>
 	
 	
-	<para>Finally the command line for execution of the class is</para>
+	<para>Finally, the command line for execution of the class is</para>
 	
 	<example>
+		<title>Command line for JUnit execution</title>
 		<programlisting><![CDATA[java -classpath %CLASSPATH%;junit-4.0.jar;jcommander-1.5.jar;commons-io-1.4.jar;
 guice-2.0.jar;commons-lang-2.5.jar;bsh-2.0b4.jar;snakeyaml-1.7.jar;
 aopalliance-1.0.jar;tap4j-1.4.3.jar;. RunJUnitTestWithListenerClass]]></programlisting>
@@ -224,8 +229,7 @@ aopalliance-1.0.jar;tap4j-1.4.3.jar;. RunJUnitTestWithListenerClass]]></programl
       <class name="sample.MyJUnitTestClass"/>
     </classes>
   </test>
-</suite> 
-]]>
+</suite>]]>
 </programlisting>
 	</example>
 	
