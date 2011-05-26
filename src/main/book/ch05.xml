@@ -4,172 +4,231 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns3="http://www.w3.org/1999/xhtml" xml:id="chapter.testng">
+         xmlns:ns3="http://www.w3.org/1999/xhtml">
          
-	<title><application>TestNG</application> and <acronym>TAP</acronym></title>
+	<title>JUnit and TAP</title>
 	
-	<para><application>TestNG</application> is a Test Framework created by Cédric Beust to fill the  
-	gaps left by JUnit at that time. One of these gaps was extensibility. It  
-	was hard modify the behavior of <application>JUnit</application> framework, thus you had to live with 
-	what the framework provided or, literaly, hack it. One of the ways to 
-	extend <application>TestNG</application> is using listeners</para>
+	<para><application>JUnit</application> is the most famous unit testing framework for JAVA. 
+	It was created by Eric Gamma and Kent Beck.</para>
 	
-	<para>Using listeners in <application>TestNG</application> you can add actions during your test 
-	execution lifecycle. In tap4j there is a Listener responsible for creating 
-	<acronym>TAP</acronym> Streams from your <application>TestNG</application> test suite. The <application>TestNG</application> tap4j listener 
-	generates <acronym>TAP</acronym> Streams for suites, groups, tests and methods. It was 
-	created based on the HTML listener. The classes used to integrate 
-	<application>TestNG</application> and <acronym>TAP</acronym> are in the package org.tap4j.ext.testng in  
-	org.tap4j:tap4j:2.0:jar.</para>
+	<para>With <application>tap4j</application> it is possible to generate TAP output for 
+	<application>JUnit</application> tests.</para>
 	
-	<para>To make your existing <application>TestNG</application> tests output <acronym>TAP</acronym> all you need to do is 
-	add tap4j listener to your project. You can do so by adding a listener to 
-	your classes or to your test suite. Although in this book we show both 
-	ways, we recommend you to use the latter.</para>
-
+	<para>There are 2 possible ways to achieve the integration between tap4j and 
+	<application>JUnit</application>. One is creating a customized 
+	<application>JUnit</application> RunListener. The other way is using <application>TestNG</application> 
+	xml suites. In both cases it is necessary to add to the tests execution a Listener provided by 
+	<application>tap4j</application>.</para>
+	
+	<para>Let's speak more about each possible solution.</para>
+	
+	<para>So, imagine we have a simple <application>JUnit</application> test class and we 
+	want to make it generates <acronym>TAP</acronym> results.</para>
+	
+	<para>Using a JUnit test executor class</para>
+	
 	<example>
-	<title>sample.MyFirstTest.java</title>
+		<title>sample.MyJUnitTestClass.java</title>
 <programlisting 
-	linenumbering="numbered" 
-	language="Java"><![CDATA[package sample;
+linenumbering="numbered" 
+language="Java"><![CDATA[package sample;
 
-import org.tap4j.ext.testng.TestTAPReporter;
-import org.testng.Assert;
-import org.testng.annotations.Listeners;
-import org.testng.annotations.Test;
+import junit.framework.Assert;
+import junit.framework.TestCase;
 
-@Listeners(TestTAPReporter.class)
-public class MyFirstTest
+public class MyJUnitTestClass extends TestCase
 {
-
-	@Test
-	public void testCurrentTime()
+	public void testEquals()
 	{
-		Assert.assertTrue( System.currentTimeMillis() > 0 );
+		Assert.assertTrue( "O".equals( "0" ) );
 	}
-	
 }]]>
 </programlisting>
 	</example>
-
-	<para>The code above contains a sample test that asserts that the current 
-	time in millis returned by the System is greater than zero. Notice though 
-	that we added the annotation @Listeners with tap4j's Listener as its value. 
-	The TestTAPReporter listener is responsible for generating <acronym>TAP</acronym> Streams for 
-	tests and methods. After running your test with this listener the 
-	following files will have been generated for you: sample.MyFirstTest.tap, 
-	sample.MyFirstTest#testCurrentTime.tap. If you are using Maven these files 
-	may have been created in ${basedir}/test-output or ${basedir}/target/surefire-reports 
-	or in another directoy depending on your configuration.</para>
+	
+	<para>Here we have a sample test class called MyJUnitTestClass with 1 method 
+	testEquals supposed to return passed as result.</para>
+	
+	<para>We need then to create the <application>JUnit</application> test executor class, 
+	where we must add the <application>JUnit</application> <acronym>TAP</acronym> 
+	reporter listener.</para>
 	
 	<example>
-	<title>sample.MyFirstTest.tap</title>
-<programlisting><![CDATA[]]>1..1
-ok 1 - sample.MyFirstTest#testCurrentTime
+		<title>sample.RunJUnitSuiteWithListener.java</title>
+<programlisting 
+linenumbering="numbered" 
+language="Java"><![CDATA[package sample;
+
+import org.junit.runner.JUnitCore;
+
+import org.tap4j.ext.junit.JUnitTestTapReporter;
+
+public class RunJUnitSuiteWithListener 
+{
+	public static void main(String[] args) 
+	{
+		// Create a JUnit suite
+		TestSuite suite = new TestSuite();
+		
+		// Add every test class you want to the suite
+		suite.addTestSuite(MyJUnitTestClass.class);
+		
+		// Instantiate a JUniteCore object
+		JUnitCore core = new JUnitCore();
+		
+		// Add TAP Reporter Listener to the core object executor
+		core.addListener(new JUnitTestTapReporter());
+		
+		// Run the test suite
+		core.run(suite);
+	}
+}]]>
+</programlisting>
+	</example>
+	
+	<para>So, when we execute the RunJUnitTestWithListener class, it will run the 
+	MyJUnitTestClass with the JUnitTestTapReporter listener. As a result 
+	we are going to have 3 tap files. 1 for the suite, 1 for the class 1 for the method.</para>
+	
+	<example>
+	<title>sample.MyJUnitTestClass-SUITE.tap</title>
+<programlisting><![CDATA[1..1
+not ok 1 - sample.MyJUnitTestClass#testEquals
   ---
-  message: TestNG Test testCurrentTime
-  severity: '~'
-  source: sample.MyFirstTest#testCurrentTime
-  datetime: '2011-05-16T12:47:10'
-  file: sample.MyFirstTest
-  line: '~'
-  name: testCurrentTime
-  extensions: '~'
-  got: '~'
-  expected: '~'
-  display: '~'
-  dump: '~'
-  error: '~'
-  backtrace: '~'
-  ...
+  message: JUnit 4.0 Test testEquals(sample.MyJUnitTestClass)
+  severity: High
+  source: sample.MyJUnitTestClass#testEquals
+  datetime: '2011-05-20T11:04:11'
+  file: sample.MyJUnitTestClass
+  line: '10'
+  name: testEquals
+  error: 'null'
+  backtrace: "junit.framework.AssertionFailedError: null\n\tat junit.framework.Assert.fail(Assert.java:47)\n\
+    \tat junit.framework.Assert.assertTrue(Assert.java:20)\n\tat junit.framework.Assert.assertTrue(Assert.java:27)\n\
+    \tat sample.MyJUnitTestClass.testEquals(MyJUnitTestClass.java:10)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native\
+    \ Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)\n\
+    \tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)\n\
+    \tat java.lang.reflect.Method.invoke(Method.java:597)\n\tat junit.framework.TestCase.runTest(TestCase.java:168)\n\
+    \tat junit.framework.TestCase.runBare(TestCase.java:134)\n\tat junit.framework.TestResult$1.protect(TestResult.java:110)\n\
+    \tat junit.framework.TestResult.runProtected(TestResult.java:128)\n\tat junit.framework.TestResult.run(TestResult.java:113)\n\
+    \tat junit.framework.TestCase.run(TestCase.java:124)\n\tat junit.framework.TestSuite.runTest(TestSuite.java:243)\n\
+    \tat junit.framework.TestSuite.run(TestSuite.java:238)\n\tat junit.framework.TestSuite.runTest(TestSuite.java:243)\n\
+    \tat junit.framework.TestSuite.run(TestSuite.java:238)\n\tat org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:83)\n\
+    \tat org.junit.runner.JUnitCore.run(JUnitCore.java:157)\n\tat org.junit.runner.JUnitCore.run(JUnitCore.java:145)\n\
+    \tat sample.RunJUnitSuiteWithListener.main(RunJUnitSuiteWithListener.java:56)\n"
+  ...]]>
+</programlisting>
+	</example>
+	
+	<example>
+	<title>sample.MyJUnitTestClass.tap</title>
+<programlisting><![CDATA[1..1
+not ok 1 - sample.MyJUnitTestClass#testEquals
+  ---
+  message: JUnit 4.0 Test testEquals(sample.MyJUnitTestClass)
+  severity: High
+  source: sample.MyJUnitTestClass#testEquals
+  datetime: '2011-05-20T11:04:11'
+  file: sample.MyJUnitTestClass
+  line: '10'
+  name: testEquals
+  error: 'null'
+  backtrace: "junit.framework.AssertionFailedError: null\n\tat junit.framework.Assert.fail(Assert.java:47)\n\
+    \tat junit.framework.Assert.assertTrue(Assert.java:20)\n\tat junit.framework.Assert.assertTrue(Assert.java:27)\n\
+    \tat sample.MyJUnitTestClass.testEquals(MyJUnitTestClass.java:10)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native\
+    \ Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)\n\
+    \tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)\n\
+    \tat java.lang.reflect.Method.invoke(Method.java:597)\n\tat junit.framework.TestCase.runTest(TestCase.java:168)\n\
+    \tat junit.framework.TestCase.runBare(TestCase.java:134)\n\tat junit.framework.TestResult$1.protect(TestResult.java:110)\n\
+    \tat junit.framework.TestResult.runProtected(TestResult.java:128)\n\tat junit.framework.TestResult.run(TestResult.java:113)\n\
+    \tat junit.framework.TestCase.run(TestCase.java:124)\n\tat junit.framework.TestSuite.runTest(TestSuite.java:243)\n\
+    \tat junit.framework.TestSuite.run(TestSuite.java:238)\n\tat junit.framework.TestSuite.runTest(TestSuite.java:243)\n\
+    \tat junit.framework.TestSuite.run(TestSuite.java:238)\n\tat org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:83)\n\
+    \tat org.junit.runner.JUnitCore.run(JUnitCore.java:157)\n\tat org.junit.runner.JUnitCore.run(JUnitCore.java:145)\n\
+    \tat sample.RunJUnitSuiteWithListener.main(RunJUnitSuiteWithListener.java:56)\n"
+  ...]]>
 </programlisting>
 	</example>
 
 	<example>
-	<title>sample.MyFirstTest#testCurrentTime.tap</title>
+	<title>sample.MyJUnitTestClass#testEquals.tap</title>
 <programlisting><![CDATA[1..1
-ok 1 - sample.MyFirstTest#testCurrentTime
+not ok 1 - sample.MyJUnitTestClass#testEquals
   ---
-  message: TestNG Test testCurrentTime
-  severity: '~'
-  source: sample.MyFirstTest#testCurrentTime
-  datetime: '2011-05-16T12:47:10'
-  file: sample.MyFirstTest
-  line: '~'
-  name: testCurrentTime
-  extensions: '~'
-  got: '~'
-  expected: '~'
-  display: '~'
-  dump: '~'
-  error: '~'
-  backtrace: '~'
-  ...
-]]></programlisting>
+  message: JUnit 4.0 Test testEquals(sample.MyJUnitTestClass)
+  severity: High
+  source: sample.MyJUnitTestClass#testEquals
+  datetime: '2011-05-20T11:04:11'
+  file: sample.MyJUnitTestClass
+  line: '10'
+  name: testEquals
+  error: 'null'
+  backtrace: "junit.framework.AssertionFailedError: null\n\tat junit.framework.Assert.fail(Assert.java:47)\n\
+    \tat junit.framework.Assert.assertTrue(Assert.java:20)\n\tat junit.framework.Assert.assertTrue(Assert.java:27)\n\
+    \tat sample.MyJUnitTestClass.testEquals(MyJUnitTestClass.java:10)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native\
+    \ Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)\n\
+    \tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)\n\
+    \tat java.lang.reflect.Method.invoke(Method.java:597)\n\tat junit.framework.TestCase.runTest(TestCase.java:168)\n\
+    \tat junit.framework.TestCase.runBare(TestCase.java:134)\n\tat junit.framework.TestResult$1.protect(TestResult.java:110)\n\
+    \tat junit.framework.TestResult.runProtected(TestResult.java:128)\n\tat junit.framework.TestResult.run(TestResult.java:113)\n\
+    \tat junit.framework.TestCase.run(TestCase.java:124)\n\tat junit.framework.TestSuite.runTest(TestSuite.java:243)\n\
+    \tat junit.framework.TestSuite.run(TestSuite.java:238)\n\tat junit.framework.TestSuite.runTest(TestSuite.java:243)\n\
+    \tat junit.framework.TestSuite.run(TestSuite.java:238)\n\tat org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:83)\n\
+    \tat org.junit.runner.JUnitCore.run(JUnitCore.java:157)\n\tat org.junit.runner.JUnitCore.run(JUnitCore.java:145)\n\
+    \tat sample.RunJUnitSuiteWithListener.main(RunJUnitSuiteWithListener.java:56)\n"
+  ...]]>
+</programlisting>
 	</example>
 
-	<para>Next we will see how to add our listeners to a <application>TestNG</application> 
-	suite (XML or YAML).</para>
+	<para>As we have only one test suite with one test class and only one test method, 
+	all 3 files have exactly the same content about tests.</para>
+		
+	<para>Pay attention! When you run the executor class it is not going to show the 
+	results on <application>JUnit</application> eclipse view. It runs in background 
+	and generates the TAP files in the project root. You need to refresh your project 
+	on navigator view to see the tap files that were generated</para>
+	
+	
+	<para>Finally the command line for execution of the class is</para>
 	
 	<example>
-	<title>sample.suite.xml</title>
-<programlisting><![CDATA[<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-  
-<suite name="Sample suite" verbose="1" >
+		<programlisting><![CDATA[java -classpath %CLASSPATH%;junit-4.0.jar;jcommander-1.5.jar;commons-io-1.4.jar;
+guice-2.0.jar;commons-lang-2.5.jar;bsh-2.0b4.jar;snakeyaml-1.7.jar;
+aopalliance-1.0.jar;tap4j-1.4.3.jar;. RunJUnitTestWithListenerClass]]></programlisting>
+	</example>
+	
+	
+	<para>Using <application>TestNG</application> suite xml files to execute your 
+	<application>JUnit</application> tests</para>
+	
+	<para> This is strange, but it is a very good idea. It is easy to implement 
+	and works perfectly as TestNG can interpret JUnit and run just like TestNG. 
+	Here, you only need to create xml suite files with the tap4j listeners, just 
+	like you would do if the tests were made with TestNG. The only difference is 
+	that you need to set the "junit" attribute inside "&#60;suite&#60;" branch to 
+	"true". Really easy no? TestNG takes care of the rest.</para>
+	
+	<para>So your suite xml file will look like this:</para>
+	
+	<example>
+	<title>sample.MyJUnitTestClass#testEquals.tap</title>
+<programlisting><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="JUnit tests with TestNG suite" verbose="0" parallel="false" junit="true">
   <listeners>
-  	<listener class-name="org.tap4j.ext.testng.TestTAPReporter"></listener>
-  	<listener class-name="org.tap4j.ext.testng.SuiteTAPReporter"></listener>
+    <listener class-name="org.tap4j.ext.testng.SuiteTAPReporter" /> 
+    <listener class-name="org.tap4j.ext.testng.TestTAPReporter" /> 
   </listeners>
-  <test name="My first test">
+  <test name="JUnit tests with TestNG suite" preserve-order="false">
     <classes>
-      <class name="sample.MyFirstTest"/>
+      <class name="sample.MyJUnitTestClass"/>
     </classes>
   </test>
-</suite>]]></programlisting>
+</suite> 
+]]>
+</programlisting>
 	</example>
 	
-	<example>
-	<title>sample.suite.yaml</title>
-<programlisting><![CDATA[name: Sample suite
-verbose: 1
-
-listeners: 
-  - org.tap4j.ext.testng.SuiteTAPReporter
-  - org.tap4j.ext.testng.TestTAPReporter
-
-tests:
-  - name: My first test
-    classes:
-      - sample.MyFirstTest]]></programlisting>
-	</example>
-      
-	<para>After executing your tests using the listeners shown above you 
-	should find the following new file in your output folder: Sample suite.tap. 
-	A new listener was added here, it is org.tap4j.ext.testng.SuiteTAPReporter. 
-	This listener is responsible for creating <acronym>TAP</acronym> Streams per suite and groups 
-	for you.</para>
+	<para>The results are going to be given just like in the other way.</para>
 	
-	<example>
-	<title>Sample suite.tap</title>
-<programlisting><![CDATA[1..1
-ok 1 - sample.MyFirstTest#testCurrentTime
-  ---
-  message: TestNG Test testCurrentTime
-  severity: '~'
-  source: sample.MyFirstTest#testCurrentTime
-  datetime: '2011-05-16T12:44:08'
-  file: sample.MyFirstTest
-  line: '~'
-  name: testCurrentTime
-  extensions: '~'
-  got: '~'
-  expected: '~'
-  display: '~'
-  dump: '~'
-  error: '~'
-  backtrace: '~'
-  ...
-]]></programlisting>
-	</example>
-
 </chapter>

@@ -5,25 +5,16 @@
          xmlns:ns5="http://www.w3.org/2000/svg"
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml">
-         
-	<title>Alternatives to TAP</title>
+	<title>Where is TAP being used?</title>
 	
-	<para>The first alternative to TAP would be the 'not TAP', where you 
-	simply keep using your current output format. Say you are using JUnit, 
-	then you keep using JUnit.</para>
+	<para>As mentioned in Chapter 1, TAP was created within the Perl community 
+	and is thus used by many Perl programmers as default output format for their 
+	tests. However TAP was later ported for PHP, Python, C, C++, Shell, Ruby, 
+	Java, Lua, among other programming languages.</para>
 	
-	<para>However, if you are looking for another standard for an output format 
-	for your tests, then you may have a look at 
-	<link xlink:href="http://launchpad.net/subunit">Subunit</link>.</para>
-	
-	<blockquote>
-		<para>Subunit is a streaming protocol for test results. 
-		The protocol is human readable and easily generated and parsed. 
-		By design all the components of the protocol conceptually fit 
-		into the xUnit TestCase->TestResult interaction.</para>
-		<address><xref xlink:href="http://launchpad.net/subunit"/></address>
-	</blockquote>
-	
-	<para>Subunit also contains a small tool that converts TAP to Subunit.</para>
+	<para>The Jenkins TestLink Plug-in is a consumer of TAP Streams. This 
+	plug-in executes automated tests integrated with TestLink and reads the 
+	test results (files with TAP Streams) and uploads test results back 
+	to TestLink.</para>
 	
 </chapter>

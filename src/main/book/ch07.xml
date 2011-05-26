@@ -6,19 +6,38 @@
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml">
          
-	<title><application>Selenium</application>, <application>TestNG</application> 
-	and <acronym>TAP</acronym></title>
+	<title>Diagnostics in TAP with YAML</title>
 	
-	<para>In this final chapter we will guide you through a more detailed and 
-	technical path: use <acronym>TAP</acronym> in your 
-	<application>Selenium</application> test back ended by 
-	<application>TestNG</application>. It means you will run 
-	<application>TestNG</application> tests that uses <application>Selenium</application> 
-	API for funcional Web tests and the output of this process will be 
-	<acronym>TAP</acronym>.</para>
+	<para>In TAP it is very easy to see whether a test passed or failed, but 
+	sometimes you want more information, like adding a stack trace, the raw test, 
+	expected and got values or a base64 file content. This extra information is 
+	called diagnostics.  
+	</para>
 	
-	<para>So it is hammer time! If you are still confused about how to integrate 
-	<application>TestNG</application> and <acronym>TAP</acronym>, please go back  
-	to <link linkend="chapter.testng">Chapter 6</link> to read about it.</para>
+	<example>
+		<title>YAMLish diagnostics in TAP</title>
+		<programlisting linenumbering="numbered" language="TAP"><![CDATA[1..3
+ok 1
+not ok 2
+   ---
+   expected: 1
+   got: 2
+   file: sample.MyFirstTest.java
+   ...
+ok 3 # SKIP
+]]></programlisting>
+	</example>
+	
+	<para>The example above gives you an example of diagnostics in TAP. The 
+	syntax is called YAMLish. YAML is <quote><author><orgname>YAML.org
+	</orgname></author>a human friendly data serialization standard for all 
+	programming languages</quote>. It is an acronym for YAML Aint' Markup 
+	Language, although some may think it means Yet Another Marlup Language.</para>
+	
+	
+	<para>As you can see you just have to enclose YAML between '---' and 
+	'...', then you add each property followed by a ':' and the property's 
+	value. Each YAML is linked to the Test Result above it. In example 1 
+	the YAML contains the diagnostic information of the 'not ok 2' Test Result.</para>
 	
 </chapter>

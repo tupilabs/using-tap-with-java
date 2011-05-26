@@ -6,31 +6,24 @@
          xmlns:ns4="http://www.w3.org/1998/Math/MathML"
          xmlns:ns3="http://www.w3.org/1999/xhtml">
          
-	<title>How to use TAP in Java</title>
+	<title>Alternatives to TAP</title>
 	
-	<para>At the moment this book was being written there were two 
-	implementations of TAP for Java: JTap and tap4j.</para>
+	<para>The first alternative to TAP would be the 'not TAP', where you 
+	simply keep using your current output format. Say you are using JUnit, 
+	then you keep using JUnit.</para>
 	
-	<para>JTap is a port of libtap (Perl) to Java by Patrick LeBoutillier 
-	(patl@cpan.org). It is the oldest implementation of the protocol to Java, 
-	however it doesn't outputs TAP, i.e. JTap is only a producer, not a 
-	consumer.</para>
+	<para>However, if you are looking for another standard for an output format 
+	for your tests, then you may have a look at 
+	<link xlink:href="http://launchpad.net/subunit">Subunit</link>.</para>
 	
-	<para>tap4j was created in 2010 by Bruno P. Kinoshita. It contains both a 
-	consumer and a producer in Java. The current version of tap4j is 2.0 and 
-	it is already deployed to Maven central repository. What is interesting is 
-	that the author of tap4 contacted JTap's author and after some talk Patrick 
-	sent metatap to Bruno. Using this Perl script you can say what you expect 
-	(2 success test results and 1 that failed) and it will check if a given TAP 
-	Stream is according to what you are expecting.</para>
+	<blockquote>
+		<para>Subunit is a streaming protocol for test results. 
+		The protocol is human readable and easily generated and parsed. 
+		By design all the components of the protocol conceptually fit 
+		into the xUnit TestCase->TestResult interaction.</para>
+		<address><xref xlink:href="http://launchpad.net/subunit"/></address>
+	</blockquote>
 	
-	<para>The current parser of tap4j is a Regular Expressions parser. The tap4j 
-	team is using snakeyaml parser as basis to write a recursive descent parser. 
-	And the team also has plans of submitting tap4j to Apache Incubator.</para>
-	
-	<para>tap4j is low level API. You can use it directly or abstract TAP and 
-	plug it with JUnit or TestNG test frameworks. Both APIs contain extension 
-	points that let you extend its functionality. tap4j contains extensions 
-	for both test frameworks.</para>
+	<para>Subunit also contains a small tool that converts TAP to Subunit.</para>
 	
 </chapter>
